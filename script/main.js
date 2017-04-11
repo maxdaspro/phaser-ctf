@@ -31,15 +31,10 @@ function create(){
 	//ajout voiture
 	car = this.add.sprite(400, 300, 'car');
 
-	
-
 	//taille de la voiture
 	car.scale.setTo(0.3);
 	//ajout point d'anchrage pour que ce soi s au mileu de l'objet
 	car.anchor.set(0.5);
-
-	game.camera.follow(car);
-
 	
 	//ajout moteur physique
 	game.physics.arcade.enable( car );
@@ -49,6 +44,8 @@ function create(){
 	car.mass = 1;
 	//vitesse maximal du car
 	car.body.maxVelocity.set(150);
+
+	game.camera.follow(car);
 
 	
 	//créer les curseurs du clavier
