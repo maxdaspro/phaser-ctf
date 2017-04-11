@@ -9,54 +9,70 @@ var rand = function (min, max) {
 }
 
 //variables
+var map;
 var cursors;
 var car;
 var enemies;
-var land;
+var flag;
+var layers = {};
 
 //PRELOAD
 function preload() {
     game.load.tilemap("map", "assets/images/ctf.json", null, Phaser.Tilemap.TILED_JSON);
-    game.load.image("bg", "assets/images/map.png");
     game.load.image("car", "assets/images/car.png");
+    game.load.image("tiles", "assets/images/tiles.png");
 }
 
 var collisionLayer;
 //CREATE
 function create() {
 
-    let map = game.add.tilemap('map');
+    map = game.add.tilemap('map');
+    map.addTilesetImage('tiles');
 
+    let objs = game.add.group();
+    objs.enableBody = true;
 
+    map.createFromObjects('Object Layer 1', 'cols', 'coin', 0, true, false, objs);
+    
+    console.log(map);
 
-    /***********/
+    // console.log(map);
 
-    land = game.add.tileSprite(0, 0, 2048, 608, "bg");
+    layers = {
+        fond: map.createLayer('fond'),
+        bases: map.createLayer('bases'),
+        obstacle: map.createLayer('obstacle'),
+        collisions: map.createLayer('collisions')
+    };
 
-    game.world.setBounds(0, 0, 2048, 608);
+    layers.fond.resizeWorld();
+    layers.collisions.resizeWorld();
 
-    car = this.add.sprite(400, 300, 'car');
+    map.setCollisionBetween(1, 2000, true, layers.collisions);
+
+    layers.collisions.alpha = 0;
+
+    car = game.add.sprite(400, 300, 'car');
 
     game.physics.arcade.enable(car);
+
     car.scale.setTo(0.3);
     car.anchor.set(0.5);
 
-    car.body.maxVelocity.setTo(150, 150);
-    car.bringToTop();
-
+    car.body.drag.set(70);
     car.body.collideWorldBounds = true;
-
-    //créer les curseurs du clavier
-    cursors = this.input.keyboard.createCursorKeys();
+    car.body.maxVelocity.set(150);
 
     game.camera.follow(car);
-    // collisionLayer = land.createLayer
+
+    cursors = this.input.keyboard.createCursorKeys();
 }
 
 //UPDATE
 function update() {
 
-   // game.physics.arcade.overlap(enemyBullets, tank, bulletHitPlayer, null, this);
+    game.physics.arcade.collide(car, layers.collisions);
 
     if (cursors.up.isDown) {
         game.physics.arcade.accelerationFromRotation(
@@ -80,8 +96,6 @@ function update() {
     } else {
         car.body.angularVelocity = 0;
     }
-
-    // game.physics.arcade.collide(car,);
 }
 
 //RENDER
