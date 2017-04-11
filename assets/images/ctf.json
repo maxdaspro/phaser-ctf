@@ -50,75 +50,55 @@
          "name":"cols",
          "objects":[
                 {
-                 "height":350,
-                 "id":2,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":274,
-                 "x":616,
-                 "y":48
-                }, 
-                {
-                 "ellipse":true,
-                 "height":228,
-                 "id":3,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":342,
-                 "x":1212,
-                 "y":288
-                }, 
-                {
-                 "ellipse":true,
                  "height":0,
-                 "id":4,
+                 "id":9,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":1594,
-                 "y":-226
+                 "x":292,
+                 "y":-302
+                }, 
+                {
+                 "ellipse":true,
+                 "height":118,
+                 "id":10,
+                 "name":"col",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":122,
+                 "x":528,
+                 "y":204
                 }, 
                 {
                  "height":0,
-                 "id":5,
-                 "name":"",
-                 "polyline":[
+                 "id":11,
+                 "name":"col",
+                 "polygon":[
                         {
                          "x":0,
                          "y":0
                         }, 
                         {
-                         "x":-128,
-                         "y":130
+                         "x":294,
+                         "y":70
                         }, 
                         {
-                         "x":-310,
-                         "y":-38
+                         "x":144,
+                         "y":156
                         }, 
                         {
-                         "x":-108,
-                         "y":-166
-                        }, 
-                        {
-                         "x":376,
-                         "y":-94
-                        }, 
-                        {
-                         "x":2,
-                         "y":2
+                         "x":26,
+                         "y":110
                         }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":1368,
-                 "y":86
+                 "x":508,
+                 "y":418
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -127,7 +107,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":6,
+ "nextobjectid":12,
  "orientation":"orthogonal",
  "renderorder":"left-up",
  "tileheight":16,

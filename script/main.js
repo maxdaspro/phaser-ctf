@@ -16,28 +16,18 @@ var enemies;
 var flag;
 var layers = {};
 
-//PRELOAD
 function preload() {
     game.load.tilemap("map", "assets/images/ctf.json", null, Phaser.Tilemap.TILED_JSON);
     game.load.image("car", "assets/images/car.png");
+    game.load.image("point", "assets/images/point.png");
     game.load.image("tiles", "assets/images/tiles.png");
 }
 
-var collisionLayer;
-//CREATE
+
 function create() {
 
     map = game.add.tilemap('map');
     map.addTilesetImage('tiles');
-
-    let objs = game.add.group();
-    objs.enableBody = true;
-
-    map.createFromObjects('Object Layer 1', 'cols', 'coin', 0, true, false, objs);
-    
-    console.log(map);
-
-    // console.log(map);
 
     layers = {
         fond: map.createLayer('fond'),
@@ -68,11 +58,13 @@ function create() {
 
     cursors = this.input.keyboard.createCursorKeys();
 }
-
+function hit(){
+    console.log('ok');
+}
 //UPDATE
 function update() {
 
-    game.physics.arcade.collide(car, layers.collisions);
+    game.physics.arcade.collide(layers.collisions, car);
 
     if (cursors.up.isDown) {
         game.physics.arcade.accelerationFromRotation(
