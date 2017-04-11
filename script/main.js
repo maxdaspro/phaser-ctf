@@ -8,26 +8,37 @@ var rand = function(min, max){
 }
 
 //variables
+var map;
 var cursors;
 var car;
 var enemies;
 var land;
+var flag;
+var layer;
 
 //PRELOAD
 function preload(){
-	game.load.tilemap("map", "assets/images/ctf.json", null, Phaser.Tilemap.TILED_JSON);
-	game.load.image("bg", "assets/images/map.png");
+	game.load.tilemap("map", "assets/images/ctf2.json", null, Phaser.Tilemap.TILED_JSON);
 	game.load.image("car", "assets/images/car.png");
+	game.load.image("grounds", "assets/images/grounds.png");
 	
 }
 //CREATE
 function create(){
-	//resize game world
-	game.world.setBounds(0, 0, 2048, 608);
-	//ajout background Sprite
-	land = game.add.tileSprite(0, 0, 1000, 608, 'bg');	
-	land.fixedToCamera = true;
+	// //resize game world
+	// game.world.setBounds(0, 0, 2048, 608);
+	// //ajout background Sprite
+	// land = game.add.tileSprite(0, 0, 2048, 608, 'map');	
 
+	game.physics.startSystem(Phaser.Physics.ARCADE);
+
+    map = game.add.tilemap('map');
+
+    map.addTilesetImage('grounds');
+
+    map.setCollisionBetween(1,12);
+    layer= map.createLayer('grounds');
+    // layer.resizeWorld();
 	//ajout voiture
 	car = this.add.sprite(400, 300, 'car');
 
@@ -41,7 +52,7 @@ function create(){
 	//ajout friction sur élément
 	car.body.drag.set(70);
 	
-	car.mass = 1;
+	car.body.collideWorldBounds = true;
 	//vitesse maximal du car
 	car.body.maxVelocity.set(150);
 
