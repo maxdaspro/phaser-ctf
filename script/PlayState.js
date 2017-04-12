@@ -7,9 +7,9 @@ let car;
 let enemies;
 let flag;
 let layers = {};
-let seaGroup;
+let Groups = {};
 
-PlayState.preload = function(){
+PlayState.preload = function () {
     game.load.tilemap("map", "assets/images/mapfinal.json", null, Phaser.Tilemap.TILED_JSON);
     game.load.image("car", "assets/images/car.png");
     game.load.image("tiles", "assets/images/tiles.png");
@@ -17,7 +17,7 @@ PlayState.preload = function(){
     game.load.image("flag", "assets/images/flag2.png");
 }
 
-PlayState.create = function(){
+PlayState.create = function () {
 
     map = game.add.tilemap('map');
     map.addTilesetImage('tiles');
@@ -37,26 +37,14 @@ PlayState.create = function(){
 
     map.setCollisionBetween(1, 2000, true, layers.collisions);
     map.setCollisionBetween(1, 2000, true, layers.mort);
-    // map.setCollisionBetween(1, 2000, true, layers.eau);
 
     layers.collisions.alpha = 0;
     layers.mort.alpha = 1;
 
-
-
-    /*************/
-    seaGroup = this.game.add.group();
-    seaGroup.enableBody = true;
-    seaGroup.alpha = 0.2;
-    var item;
-    let result = this.findObjectsByType('item', map, 'objectsLayer');
-    result.forEach(function(element){
-        this.createFromTiledObject(element, seaGroup);
-    }, this);
-    
-    console.log(seaGroup);
-    /**************/
-
+    Groups.decelerate = this.game.add.group();
+    Groups.decelerate.enableBody = true;
+    Groups.decelerate.alpha = 1;
+    Helper.Phaser.drawObjectInGroup('decelerate', map, 'objectsLayer', Groups.decelerate);
 
     game.physics.arcade.enable(layers.mort);
 
@@ -80,31 +68,29 @@ PlayState.create = function(){
 
     game.camera.follow(car);
 
-    flag = game.add.sprite(1930, (game.height/2) - 13, 'flag');
-    flag.anchor.set(0 , 1);
+    flag = game.add.sprite(1930, (game.height / 2) - 13, 'flag');
+    flag.anchor.set(0, 1);
     game.physics.arcade.enable(flag);
     cursors = this.input.keyboard.createCursorKeys();
 
     // game.camera.x = 2000;
 }
-PlayState.carFlag = function(car, flag){
+PlayState.carFlag = function (car, flag) {
     flag.x = car.x;
     flag.y = car.y;
 }
-PlayState.carKill = function(){
+PlayState.carKill = function () {
     car.kill();
-    console.log("mort")
 }
-PlayState.carWater = function(){
-    console.log('ralenti');
+PlayState.carWater = function () {
     car.body.maxVelocity.set(50);
 }
-PlayState.update = function() {
+PlayState.update = function () {
 
     game.physics.arcade.collide(car, layers.collisions);
     game.physics.arcade.overlap(car, flag, this.carFlag);
     game.physics.arcade.collide(car, layers.mort, this.carKill);
-    game.physics.arcade.overlap(car, seaGroup, this.carWater);
+    game.physics.arcade.overlap(car, Groups.decelerate, this.carWater);
 
 
     if (cursors.up.isDown) {
@@ -127,32 +113,7 @@ PlayState.update = function() {
     }
 }
 
-PlayState.render = function() {
+PlayState.render = function () {
     // game.debug.body(car);
     // game.debug.cameraInfo(game.camera, 32, 32);
 }
-
-//find objects in a Tiled layer that containt a property called "type" equal to a certain value
-PlayState.findObjectsByType = function(type, map, layer) {
-    var result = new Array();
-    map.objects[layer].forEach(function(element){
-        if(element.type === type) {
-            //Phaser uses top left, Tiled bottom left so we have to adjust
-            //also keep in mind that the cup images are a bit smaller than the tile which is 16x16
-            //so they might not be placed in the exact position as in Tiled
-            element.y -= map.tileHeight;
-            result.push(element);
-        }
-    });
-    return result;
-};
-
-//create a sprite from an object
-PlayState.createFromTiledObject = function(element, group) {
-    var sprite = group.create(element.x, element.y, 'point');
-
-    //copy all properties to the sprite
-    Object.keys(element).forEach(function(key){
-        sprite[key] = element[key];
-    });
-};
