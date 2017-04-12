@@ -76,8 +76,53 @@
          "width":125,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "height":38,
+         "name":"objectsLayer",
+         "objects":[
+                {
+                 "height":132,
+                 "id":3,
+                 "name":"",
+                 "rotation":0,
+                 "type":"item",
+                 "visible":true,
+                 "width":1192,
+                 "x":4,
+                 "y":-4
+                }, 
+                {
+                 "height":128,
+                 "id":4,
+                 "name":"",
+                 "rotation":0,
+                 "type":"item",
+                 "visible":true,
+                 "width":1254,
+                 "x":2,
+                 "y":483
+                }, 
+                {
+                 "height":0,
+                 "id":5,
+                 "name":"",
+                 "rotation":0,
+                 "type":"item",
+                 "visible":true,
+                 "width":0,
+                 "x":184,
+                 "y":-67
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "width":125,
+         "x":0,
+         "y":0
         }],
- "nextobjectid":1,
+ "nextobjectid":7,
  "orientation":"orthogonal",
  "renderorder":"left-up",
  "tileheight":16,
