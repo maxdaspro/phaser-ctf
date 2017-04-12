@@ -5,3 +5,33 @@ h1{
 	margin:0 auto;
 	width: 800px;
 }
+#game canvas{
+	margin:0 auto;
+	width: 800px;
+	border-radius: 20px;
+}
+#menu{
+	width:800px;
+	height: 608px;
+	border-radius: 20px;
+	position: absolute;
+	left:50%;
+	transform: translateX(-50%);
+	background-color: rgba(10,10,10,.2);
+}
+#menu header{
+	text-align: center;
+}
+#menu nav{
+	text-align: center;
+	margin-top:100px;
+}
+#menu nav ul{
+	 list-style: none;
+}
+#menu nav ul a{
+	text-decoration: none;
+}
+.hide{
+	display : none;
+}

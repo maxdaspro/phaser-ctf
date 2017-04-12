@@ -6,6 +6,7 @@ class Chrono {
         this.isPaused = false
         this.startPauseTime = 0;
         this.pauseTime = 0;
+        this.isStarted = false;
 
         let text = {
             body: null,
@@ -27,9 +28,8 @@ class Chrono {
     }
 
     update() {
-        if (!this.isPaused) {
+        if (!this.isPaused && this.isStarted) {
             let currentTime = Date.now();
-            this.startTime += this.pauseTime;
             this.runTime = currentTime - this.startTime;
             this.text.body.setText((this.runTime / 1000).toFixed(1))
         }
@@ -39,7 +39,14 @@ class Chrono {
         this.startPauseTime = Date.now();
     }
     resume() {
+        this.isPaused = false;
         let currentTime = Date.now();
         this.pauseTime = (currentTime - this.startPauseTime);
+        this.startTime += this.pauseTime;
+    }
+    start(){
+        this.isStarted = true;
+        this.startTime = Date.now();
+        console.log('start');
     }
 }

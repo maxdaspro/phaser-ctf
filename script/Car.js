@@ -1,13 +1,16 @@
 class Car {
 
-    constructor() {
+    constructor(x,y) {
 
-        this.initialVelocity = 220;
+        this.initialVelocity = 150;
+        this.slowVelocity = 60;
+        this.haveFlag = false;
 
-        let sprite = game.add.sprite(1500, 290, 'car');
+        let sprite = game.add.sprite(x, y, 'car');
+
         game.physics.arcade.enable(sprite);
         sprite.scale.setTo(0.3);
-        sprite.anchor.set(0.5);
+        sprite.anchor.set(0.75, 0.5);
 
         let radius = sprite.height;
         sprite.body.setCircle(radius,
@@ -16,11 +19,10 @@ class Car {
         );
 
         sprite.tint = 0x8e7373;
-        sprite.body.drag.set(100);
-        sprite.body.mass = 350;
+        sprite.body.drag.set(500);
         sprite.body.collideWorldBounds = true;
         sprite.body.maxVelocity.set(this.initialVelocity);
-        sprite.body.bounce.set(0.8);
+        sprite.body.bounce.set(0.2);
 
         this.sprite = sprite;
         this.radius = radius;
@@ -37,7 +39,7 @@ class Car {
         this.alive = false;
     }
     slowDown(){
-        this.sprite.body.maxVelocity.set(50);
+        this.sprite.body.maxVelocity.set(this.slowVelocity);
     }
     cruise(){
         this.sprite.body.maxVelocity.set(this.initialVelocity);
@@ -47,6 +49,7 @@ class Car {
         game.physics.arcade.accelerationFromRotation(
             car.sprite.rotation, 650, car.sprite.body.acceleration
         );
+        //Phaser.Easing.Bounce.Out
     }
 
     decelerate() {
@@ -56,6 +59,7 @@ class Car {
     }
 
     stop() {
+
         car.sprite.body.acceleration.set(0);
     }
 
