@@ -8,6 +8,14 @@ let enemies;
 let flag;
 let layers = {};
 let seaGroup;
+let oldDate;
+let currentDate;
+let time;
+let alive = true;
+let text;
+let style;
+let x;
+let y;
 
 PlayState.preload = function(){
     game.load.tilemap("map", "assets/images/mapfinal.json", null, Phaser.Tilemap.TILED_JSON);
@@ -18,6 +26,12 @@ PlayState.preload = function(){
 }
 
 PlayState.create = function(){
+   
+
+
+    //chrono
+    oldDate = new Date();
+    
 
     map = game.add.tilemap('map');
     map.addTilesetImage('tiles');
@@ -86,6 +100,17 @@ PlayState.create = function(){
     cursors = this.input.keyboard.createCursorKeys();
 
     // game.camera.x = 2000;
+
+    //text
+    style = { font: "30px Arial", fill: "#ffffff", align: "center" };
+    style.alpha = 0.1;
+    x = game.camera.width-50;
+    y = 25;
+    text = game.add.text(x, y, "00", style);
+    text.fixedToCamera = true;
+    text.anchor.set(0.5);
+    text.alpha = 0.5;
+    console.log(game.camera)
 }
 PlayState.carFlag = function(car, flag){
     flag.x = car.x;
@@ -93,13 +118,21 @@ PlayState.carFlag = function(car, flag){
 }
 PlayState.carKill = function(){
     car.kill();
-    console.log("mort")
+    alive = false;
+    console.log("mort le "+time)
 }
 PlayState.carWater = function(){
     console.log('ralenti');
     car.body.maxVelocity.set(50);
 }
 PlayState.update = function() {
+
+    //chrono
+    currentDate = new Date();
+    if(alive){
+        time = (currentDate - oldDate)/1000;
+        text.setText(time.toFixed(1))
+    }
 
     game.physics.arcade.collide(car, layers.collisions);
     game.physics.arcade.overlap(car, flag, this.carFlag);
@@ -130,6 +163,7 @@ PlayState.update = function() {
 PlayState.render = function() {
     // game.debug.body(car);
     // game.debug.cameraInfo(game.camera, 32, 32);
+     //game.debug.text('Elapsed seconds: ' + this.game.time.totalElapsedSeconds(), 32, 32);
 }
 
 //find objects in a Tiled layer that containt a property called "type" equal to a certain value
@@ -155,4 +189,6 @@ PlayState.createFromTiledObject = function(element, group) {
     Object.keys(element).forEach(function(key){
         sprite[key] = element[key];
     });
+
 };
+
