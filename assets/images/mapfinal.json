@@ -83,7 +83,7 @@
          "name":"objectsLayer",
          "objects":[
                 {
-                 "height":150,
+                 "height":132,
                  "id":15,
                  "name":"",
                  "rotation":0,
@@ -94,7 +94,7 @@
                  "y":-22
                 }, 
                 {
-                 "height":212,
+                 "height":196,
                  "id":16,
                  "name":"",
                  "rotation":0,
@@ -102,7 +102,29 @@
                  "visible":true,
                  "width":2476,
                  "x":0,
-                 "y":482
+                 "y":498
+                }, 
+                {
+                 "height":218,
+                 "id":24,
+                 "name":"",
+                 "rotation":0,
+                 "type":"zoneStart",
+                 "visible":true,
+                 "width":142,
+                 "x":3,
+                 "y":186
+                }, 
+                {
+                 "height":216,
+                 "id":25,
+                 "name":"",
+                 "rotation":0,
+                 "type":"zoneFlag",
+                 "visible":true,
+                 "width":171,
+                 "x":1871,
+                 "y":187
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -122,7 +144,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":21,
+ "nextobjectid":26,
  "orientation":"orthogonal",
  "renderorder":"left-up",
  "tileheight":16,

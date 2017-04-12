@@ -6,20 +6,12 @@ let cursors;
 let car;
 let enemies;
 let flag;
+let startTime;
+let currentTime;
+let runtTime;
+let chrono = {};
 let layers = {};
-
-let seaGroup;
-let oldDate;
-let currentDate;
-let time;
-let alive = true;
-let text;
-let style;
-let x;
-let y;
-
 let Groups = {};
-
 
 PlayState.preload = function () {
     game.load.tilemap("map", "assets/images/mapfinal.json", null, Phaser.Tilemap.TILED_JSON);
@@ -29,12 +21,10 @@ PlayState.preload = function () {
     game.load.image("flag", "assets/images/flag2.png");
 }
 
+PlayState.create = function () {
 
-PlayState.create = function(){
-   
-    //chrono
-    oldDate = new Date();
-    
+    cursors = this.input.keyboard.createCursorKeys();
+
     map = game.add.tilemap('map');
     map.addTilesetImage('tiles');
 
@@ -55,103 +45,76 @@ PlayState.create = function(){
     map.setCollisionBetween(1, 2000, true, layers.mort);
 
     layers.collisions.alpha = 0;
-    layers.mort.alpha = 1;
+    layers.mort.alpha = 0;
+
+    Groups.zoneStart = this.game.add.group();
+    Groups.zoneStart.enableBody = true;
+    Groups.zoneStart.alpha = 0;
+    Helper.Phaser.drawObjectInGroup('zoneStart', map, 'objectsLayer', Groups.zoneStart);
+
+    Groups.zoneFlag = this.game.add.group();
+    Groups.zoneFlag.enableBody = true;
+    Groups.zoneFlag.alpha = 0;
+    Helper.Phaser.drawObjectInGroup('zoneFlag', map, 'objectsLayer', Groups.zoneFlag);
 
     Groups.decelerate = this.game.add.group();
     Groups.decelerate.enableBody = true;
-    Groups.decelerate.alpha = 1;
+    Groups.decelerate.alpha = 0;
     Helper.Phaser.drawObjectInGroup('decelerate', map, 'objectsLayer', Groups.decelerate);
 
     game.physics.arcade.enable(layers.mort);
 
-    car = game.add.sprite(50, 290, 'car');
+    chrono = new Chrono(game.camera.width - 50, 25);
 
-    game.physics.arcade.enable(car);
+    car = new Car(this);
+    game.camera.follow(car.sprite);
 
-    car.scale.setTo(0.3);
-    car.anchor.set(0.5);
-    car.radius = car.height;
-    car.body.setCircle(car.radius,
-        (-car.radius + (0.5 * car.width) / car.scale.x),
-        (-car.radius + (0.5 * car.height) / car.scale.y)
-    );
-    car.tint = 0x8e7373;
-    car.body.drag.set(100);
-    car.body.mass = 350;
-    car.body.collideWorldBounds = true;
-    car.body.maxVelocity.set(150);
-    car.body.bounce.set(0.8);
-
-    game.camera.follow(car);
-
-    flag = game.add.sprite(1930, (game.height / 2) - 13, 'flag');
-    flag.anchor.set(0, 1);
-    game.physics.arcade.enable(flag);
-    cursors = this.input.keyboard.createCursorKeys();
-
-    // game.camera.x = 2000;
-
-    //text
-    style = { font: "30px Arial", fill: "#ffffff", align: "center" };
-    style.alpha = 0.1;
-    x = game.camera.width-50;
-    y = 25;
-    text = game.add.text(x, y, "00", style);
-    text.fixedToCamera = true;
-    text.anchor.set(0.5);
-    text.alpha = 0.5;
-    console.log(game.camera)
+    flag = new Flag();
+    game.physics.arcade.enable(flag.sprite);
 }
-PlayState.carFlag = function (car, flag) {
-    flag.x = car.x;
-    flag.y = car.y;
-}
-PlayState.carKill = function () {
-    car.kill();
-    alive = false;
-    console.log("mort le "+time)
-}
-PlayState.carWater = function () {
-    car.body.maxVelocity.set(50);
-}
+
 PlayState.update = function () {
 
-    //chrono
-    currentDate = new Date();
-    if(alive){
-        time = (currentDate - oldDate)/1000;
-        text.setText(time.toFixed(1))
-    }
+    chrono.update();
 
-    game.physics.arcade.collide(car, layers.collisions);
-    game.physics.arcade.overlap(car, flag, this.carFlag);
-    game.physics.arcade.collide(car, layers.mort, this.carKill);
-    game.physics.arcade.overlap(car, Groups.decelerate, this.carWater);
+    game.physics.arcade.collide(car.sprite, layers.collisions);
+    game.physics.arcade.overlap(car.sprite, flag.sprite, (car_sprite, flag_sprite)=>{
+       car.drag(flag_sprite);
+    });
+    // game.physics.arcade.collide(car.sprite, layers.mort, ()=>{
+    //     car.die();
+    //     chrono.pause();
+    // });
+    game.physics.arcade.overlap(car.sprite, layers.fond, ()=>{
+        car.cruise();
+    });
+    game.physics.arcade.overlap(car.sprite, Groups.decelerate, ()=>{
+        car.slowDown();
+    });
 
 
+    //Car move forwards and stop
     if (cursors.up.isDown) {
-        game.physics.arcade.accelerationFromRotation(
-            car.rotation, 650, car.body.acceleration);
+        car.accelerate();
     } else if (cursors.down.isDown) {
-        game.physics.arcade.accelerationFromRotation(
-            car.rotation, -650, car.body.acceleration);
+        car.decelerate();
     }
     else {
-        car.body.acceleration.set(0);
+        car.stop();
     }
-
+    //Car turn left OR right
     if (cursors.left.isDown) {
-        car.body.angularVelocity = -145;
+        car.turnLeft();
     } else if (cursors.right.isDown) {
-        car.body.angularVelocity = 145;
+        car.turnRight();
     } else {
-        car.body.angularVelocity = 0;
+        car.turnNot();
     }
 }
 
 PlayState.render = function () {
-    // game.debug.body(car);
+    game.debug.body(car.sprite);
     // game.debug.cameraInfo(game.camera, 32, 32);
-     //game.debug.text('Elapsed seconds: ' + this.game.time.totalElapsedSeconds(), 32, 32);
+    //game.debug.text('Elapsed seconds: ' + this.game.time.totalElapsedSeconds(), 32, 32);
 }
 
