@@ -23,8 +23,6 @@ PlayState.create = function(){
     let objs = game.add.group();
     objs.enableBody = true;
 
-    // map.createFromObjects('Object Layer 1', 'cols', 'coin', 0, true, false, objs);
-
     layers = {
         fond: map.createLayer('fond'),
         bases: map.createLayer('bases'),
@@ -41,16 +39,21 @@ PlayState.create = function(){
 
     car = game.add.sprite(50, 290, 'car');
 
-    game.physics.arcade.enable(car);
 
+    game.physics.arcade.enable(car);
     car.scale.setTo(0.3);
     car.anchor.set(0.5);
+    car.radius = car.height;
+    car.body.setCircle(car.radius,
+        (-car.radius + (0.5 * car.width) / car.scale.x),
+        (-car.radius + (0.5 * car.height) / car.scale.y)
+    );
     car.tint = 0x8e7373;
     car.body.drag.set(100);
-    car.body.mass = 50;
+    car.body.mass = 350;
     car.body.collideWorldBounds = true;
     car.body.maxVelocity.set(150);
-    car.body.bounce.set(1);
+    car.body.bounce.set(0.8);
 
     game.camera.follow(car);
 
@@ -76,28 +79,25 @@ PlayState.update = function() {
 
     if (cursors.up.isDown) {
         game.physics.arcade.accelerationFromRotation(
-            car.rotation, 500, car.body.acceleration);
-        //demande au moteur physique de phaser une acceleration en fonction d'une rotation
+            car.rotation, 650, car.body.acceleration);
     } else if (cursors.down.isDown) {
         game.physics.arcade.accelerationFromRotation(
-            car.rotation, -300, car.body.acceleration);
-        //acceleration arrière
+            car.rotation, -650, car.body.acceleration);
     }
     else {
         car.body.acceleration.set(0);
-        //acceleration du vaisseau à 0
     }
 
     if (cursors.left.isDown) {
-        car.body.angularVelocity = -130;
-        //faire tourner le vaisseau
+        car.body.angularVelocity = -145;
     } else if (cursors.right.isDown) {
-        car.body.angularVelocity = 130;
+        car.body.angularVelocity = 145;
     } else {
         car.body.angularVelocity = 0;
     }
 }
 
 PlayState.render = function() {
-    game.debug.cameraInfo(game.camera, 32, 32);
+    // game.debug.body(car);
+    // game.debug.cameraInfo(game.camera, 32, 32);
 }
