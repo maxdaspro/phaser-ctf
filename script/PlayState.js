@@ -15,13 +15,15 @@ PlayState.update = function () {
         if(car.haveFlag) {
             chrono.pause();
             car.sprite.kill();
+            game.end();
         }
     });
 
-    // game.physics.arcade.collide(car.sprite, layers.mort, ()=>{
-    //     car.die();
-    //     chrono.pause();
-    // });
+    game.physics.arcade.collide(car.sprite, layers.mort, ()=>{
+        car.die();
+        chrono.pause();
+        game.end();
+    });
     game.physics.arcade.overlap(car.sprite, layers.fond, ()=>{
         car.cruise();
     });
@@ -33,7 +35,7 @@ PlayState.update = function () {
     if (cursors.up.isDown) {
         car.accelerate();
 
-        if(!chrono.isStarted) {
+        if(!chrono.isStarted){
             chrono.start();
         }
     } else if (cursors.down.isDown) {

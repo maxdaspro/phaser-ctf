@@ -10,7 +10,7 @@ h1{
 	width: 800px;
 	border-radius: 20px;
 }
-#menu{
+#menu, #menu-end{
 	width:800px;
 	height: 608px;
 	border-radius: 20px;
@@ -19,18 +19,37 @@ h1{
 	transform: translateX(-50%);
 	background-color: rgba(10,10,10,.2);
 }
-#menu header{
+#menu header, #menu-end header{
 	text-align: center;
 }
-#menu nav{
+#menu nav,
+#menu-end nav{
 	text-align: center;
 	margin-top:100px;
 }
-#menu nav ul{
+#menu nav ul,
+#menu-end nav ul{
 	 list-style: none;
 }
-#menu nav ul a{
+#menu nav ul a,
+#menu-end nav ul a{
 	text-decoration: none;
+}
+#menu-end nav ul li{
+	position: relative;
+}
+#score-game{
+
+}
+#score-game img{
+
+}
+#score{
+	position: absolute;
+	left:435px;
+	top:20px;
+	font: 64px Aharoni;
+	color:white;
 }
 .hide{
 	display : none;
